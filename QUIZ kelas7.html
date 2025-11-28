@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIZ INFORMATIKA</title>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4CAF50 0%, #764ba2 100%);
+      min-height: 100%;
+      width: 100%;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    .app-container {
+      width: 100%;
+      min-height: 100%;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header .subtitle {
+      font-size: 1.2rem;
+      color: #f0f0f0;
+      margin-bottom: 0.5rem;
+    }
+
+    .header .welcome {
+      font-size: 1rem;
+      color: #e0e0e0;
+      font-style: italic;
+    }
+
+    .offline-badge {
+      display: inline-block;
+      background: #2ecc71;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card .number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-card .label {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      color: #667eea;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 0.5rem;
+    }
+
+    .kategori-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .kategori-card {
+      background: linear-gradient(135deg, #00BCD4 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kategori-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .kategori-card:hover::before {
+      opacity: 1;
+    }
+
+    .kategori-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .kategori-card h3 {
+      color: white;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+    }
+
+    .kategori-card .soal-range {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      font-weight: 600;
+    }
+
+    .kategori-card .progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .kategori-card .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .kategori-card .progress-fill {
+      height: 100%;
+      background: #2ecc71;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+
+    .kategori-card .progress-text {
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #667eea;
+      font-size: 1.8rem;
+    }
+
+    .close-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover {
+      background: #ff3838;
+    }
+
+    .soal-container {
+      margin-bottom: 2rem;
+    }
+
+    .soal-item {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+    }
+
+    .soal-item.answered-correct {
+      border-left-color: #2ecc71;
+      background: #e8f5e9;
+    }
+
+    .soal-item.answered-wrong {
+      border-left-color: #ff4757;
+      background: #ffebee;
+    }
+
+    .soal-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .soal-text {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .answer-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-answer {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-answer:hover:not(:disabled) {
+      border-color: #667eea;
+      background: #f0f0ff;
+    }
+
+    .btn-answer.selected-benar {
+      border-color: #2ecc71;
+      background: #2ecc71;
+      color: white;
+    }
+
+    .btn-answer.selected-salah {
+      border-color: #ff4757;
+      background: #ff4757;
+      color: white;
+    }
+
+    .btn-answer:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .pembahasan {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 3px solid #2ecc71;
+      margin-top: 1rem;
+    }
+
+    .pembahasan-title {
+      font-weight: 700;
+      color: #2ecc71;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pembahasan-text {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .result-badge.correct {
+      background: #2ecc71;
+      color: white;
+    }
+
+    .result-badge.wrong {
+      background: #ff4757;
+      color: white;
+    }
+
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-reset {
+      background: #ff4757;
+      margin-top: 1rem;
+      margin-right: 0.5rem;
+    }
+
+    .btn-reset:hover:not(:disabled) {
+      background: #ff3838;
+    }
+
+    .btn-reset-all {
+      background: #e74c3c;
+      margin-top: 1rem;
+    }
+
+    .btn-reset-all:hover:not(:disabled) {
+      background: #c0392b;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .toast-message {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      z-index: 2000;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .kategori-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 1.5rem;
+      }
+
+      .answer-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-container">
+   <header class="header">
+    <h1>QUIZ INFORMATIKA 7</h1>
+    <div class="subtitle">
+     SMP
+    </div>
+    <div class="welcome">
+     100 Soal Benar/Salah + Pembahasan Lengkap
+    </div>
+    <div class="offline-badge">
+     📴 Mode Offline - Data Tersimpan di Browser
+    </div>
+   </header>
+   <div class="content-wrapper">
+    <div class="stats-container">
+     <div class="stat-card">
+      <div class="number">
+       100
+      </div>
+      <div class="label">
+       Total Soal
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="number" id="dijawab">
+       0
+      </div>
+      <div class="label">
+       Sudah Dijawab
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="number" id="benar">
+       0
+      </div>
+      <div class="label">
+       Jawaban Benar
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="number" id="nilai">
+       0
+      </div>
+      <div class="label">
+       Nilai
+      </div>
+     </div>
+    </div>
+    <section class="section">
+     <h2 class="section-title">Kategori Soal (10 Soal per Kategori)</h2>
+     <div class="kategori-grid" id="kategori-grid"></div><button class="btn btn-reset-all" id="reset-all" style="margin-top: 1.5rem;">🔄 Reset Semua Jawaban</button>
+    </section>
+   </div>
+   <footer class="footer">
+    <p>©2025 SMP</p>
+   </footer>
+  </div>
+  <div class="modal" id="quiz-modal">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2 id="modal-title"></h2><button class="close-btn" id="close-modal" aria-label="Tutup">×</button>
+    </div>
+    <div id="soal-container" class="soal-container"></div><button class="btn btn-reset" id="reset-kategori" style="display:none;">Reset Kategori Ini</button>
+   </div>
+  </div>
+  <script>
+    const soalData = [
+      // Kategori 1: Dasar Komputer (Soal 1-10)
+      { no: 1, kategori: 'Dasar Komputer', soal: 'Komputer adalah alat elektronik yang dapat memproses data', jawaban: 'BENAR', penjelasan: 'Komputer memang alat elektronik yang dirancang untuk memproses, menyimpan, dan menampilkan data.' },
+      { no: 2, kategori: 'Dasar Komputer', soal: 'CPU adalah singkatan dari Central Processing Unit', jawaban: 'BENAR', penjelasan: 'CPU atau Central Processing Unit adalah otak dari komputer yang memproses instruksi.' },
+      { no: 3, kategori: 'Dasar Komputer', soal: 'RAM adalah media penyimpanan permanen', jawaban: 'SALAH', penjelasan: 'RAM (Random Access Memory) adalah penyimpanan sementara. Data akan hilang saat komputer dimatikan.' },
+      { no: 4, kategori: 'Dasar Komputer', soal: 'Monitor termasuk perangkat output', jawaban: 'BENAR', penjelasan: 'Monitor menampilkan hasil pemrosesan komputer, sehingga termasuk perangkat output.' },
+      { no: 5, kategori: 'Dasar Komputer', soal: 'Keyboard termasuk perangkat input', jawaban: 'BENAR', penjelasan: 'Keyboard digunakan untuk memasukkan data ke komputer, sehingga termasuk perangkat input.' },
+      { no: 6, kategori: 'Dasar Komputer', soal: 'Hard disk lebih cepat dari RAM', jawaban: 'SALAH', penjelasan: 'RAM jauh lebih cepat dalam akses data dibanding hard disk, tapi tidak permanen.' },
+      { no: 7, kategori: 'Dasar Komputer', soal: 'Mouse adalah perangkat input', jawaban: 'BENAR', penjelasan: 'Mouse digunakan untuk memasukkan perintah ke komputer melalui pointer.' },
+      { no: 8, kategori: 'Dasar Komputer', soal: 'Printer adalah perangkat output', jawaban: 'BENAR', penjelasan: 'Printer mengeluarkan hasil cetak dari komputer, sehingga termasuk perangkat output.' },
+      { no: 9, kategori: 'Dasar Komputer', soal: 'Scanner adalah perangkat output', jawaban: 'SALAH', penjelasan: 'Scanner adalah perangkat input yang digunakan untuk memindai dokumen/gambar ke komputer.' },
+      { no: 10, kategori: 'Dasar Komputer', soal: 'Speaker termasuk perangkat output', jawaban: 'BENAR', penjelasan: 'Speaker mengeluarkan suara dari komputer, sehingga termasuk perangkat output.' },
+
+      // Kategori 2: Hardware (Soal 11-20)
+      { no: 11, kategori: 'Hardware', soal: 'Motherboard adalah papan induk komputer', jawaban: 'BENAR', penjelasan: 'Motherboard adalah papan sirkuit utama yang menghubungkan semua komponen komputer.' },
+      { no: 12, kategori: 'Hardware', soal: 'Processor disebut juga otak komputer', jawaban: 'BENAR', penjelasan: 'Processor melakukan semua perhitungan dan pemrosesan data, seperti otak pada manusia.' },
+      { no: 13, kategori: 'Hardware', soal: 'RAM semakin besar komputer semakin lambat', jawaban: 'SALAH', penjelasan: 'Semakin besar RAM, komputer bisa menjalankan lebih banyak program sekaligus dengan lebih cepat.' },
+      { no: 14, kategori: 'Hardware', soal: 'Power supply berfungsi memberi daya listrik', jawaban: 'BENAR', penjelasan: 'Power supply mengubah listrik AC menjadi DC untuk semua komponen komputer.' },
+      { no: 15, kategori: 'Hardware', soal: 'VGA card mengolah tampilan grafis', jawaban: 'BENAR', penjelasan: 'VGA card atau kartu grafis memproses data grafis untuk ditampilkan di monitor.' },
+      { no: 16, kategori: 'Hardware', soal: 'Hard disk termasuk storage device', jawaban: 'BENAR', penjelasan: 'Hard disk adalah perangkat penyimpanan (storage) data secara permanen.' },
+      { no: 17, kategori: 'Hardware', soal: 'SSD lebih lambat dari HDD', jawaban: 'SALAH', penjelasan: 'SSD (Solid State Drive) jauh lebih cepat dari HDD (Hard Disk Drive) karena tidak ada komponen mekanik.' },
+      { no: 18, kategori: 'Hardware', soal: 'USB adalah port untuk menghubungkan perangkat', jawaban: 'BENAR', penjelasan: 'USB (Universal Serial Bus) adalah standar port untuk menghubungkan berbagai perangkat.' },
+      { no: 19, kategori: 'Hardware', soal: 'HDMI hanya untuk audio', jawaban: 'SALAH', penjelasan: 'HDMI (High-Definition Multimedia Interface) mentransmisikan audio dan video berkualitas tinggi.' },
+      { no: 20, kategori: 'Hardware', soal: 'Optical drive untuk membaca CD/DVD', jawaban: 'BENAR', penjelasan: 'Optical drive adalah perangkat untuk membaca dan menulis CD, DVD, atau Blu-ray.' },
+
+      // Kategori 3: Software (Soal 21-30)
+      { no: 21, kategori: 'Software', soal: 'Software adalah perangkat lunak', jawaban: 'BENAR', penjelasan: 'Software adalah program atau aplikasi yang berjalan di komputer, berbeda dari hardware.' },
+      { no: 22, kategori: 'Software', soal: 'Windows adalah sistem operasi', jawaban: 'BENAR', penjelasan: 'Windows adalah sistem operasi buatan Microsoft yang paling banyak digunakan.' },
+      { no: 23, kategori: 'Software', soal: 'Microsoft Word adalah software pengolah kata', jawaban: 'BENAR', penjelasan: 'MS Word adalah aplikasi word processor untuk membuat dan mengedit dokumen teks.' },
+      { no: 24, kategori: 'Software', soal: 'Excel digunakan untuk presentasi', jawaban: 'SALAH', penjelasan: 'Excel adalah software spreadsheet untuk mengolah angka dan data. PowerPoint untuk presentasi.' },
+      { no: 25, kategori: 'Software', soal: 'PowerPoint untuk membuat presentasi', jawaban: 'BENAR', penjelasan: 'MS PowerPoint adalah software untuk membuat dan menampilkan presentasi slide.' },
+      { no: 26, kategori: 'Software', soal: 'Browser digunakan untuk mengakses internet', jawaban: 'BENAR', penjelasan: 'Browser (Chrome, Firefox, Edge) adalah aplikasi untuk menjelajah website di internet.' },
+      { no: 27, kategori: 'Software', soal: 'Antivirus melindungi dari virus', jawaban: 'BENAR', penjelasan: 'Antivirus mendeteksi, mencegah, dan menghapus virus serta malware dari komputer.' },
+      { no: 28, kategori: 'Software', soal: 'Aplikasi adalah program komputer', jawaban: 'BENAR', penjelasan: 'Aplikasi adalah software yang dirancang untuk melakukan tugas tertentu bagi pengguna.' },
+      { no: 29, kategori: 'Software', soal: 'Driver adalah perangkat keras', jawaban: 'SALAH', penjelasan: 'Driver adalah software yang memungkinkan sistem operasi berkomunikasi dengan hardware.' },
+      { no: 30, kategori: 'Software', soal: 'Operating system mengelola hardware dan software', jawaban: 'BENAR', penjelasan: 'OS mengelola semua sumber daya komputer dan menjadi antarmuka antara user dan hardware.' },
+
+      // Kategori 4: Internet (Soal 31-40)
+      { no: 31, kategori: 'Internet', soal: 'Internet adalah jaringan komputer global', jawaban: 'BENAR', penjelasan: 'Internet adalah jaringan komputer worldwide yang menghubungkan jutaan perangkat.' },
+      { no: 32, kategori: 'Internet', soal: 'WWW singkatan dari World Wide Web', jawaban: 'BENAR', penjelasan: 'WWW adalah sistem informasi yang dapat diakses melalui internet menggunakan browser.' },
+      { no: 33, kategori: 'Internet', soal: 'Google adalah mesin pencari', jawaban: 'BENAR', penjelasan: 'Google adalah search engine terpopuler untuk mencari informasi di internet.' },
+      { no: 34, kategori: 'Internet', soal: 'Email singkatan dari Electronic Mail', jawaban: 'BENAR', penjelasan: 'Email adalah metode pengiriman pesan elektronik melalui internet.' },
+      { no: 35, kategori: 'Internet', soal: 'Download berarti mengunggah file', jawaban: 'SALAH', penjelasan: 'Download adalah mengunduh/menerima file dari internet ke komputer. Upload adalah mengunggah.' },
+      { no: 36, kategori: 'Internet', soal: 'Upload berarti mengunggah file', jawaban: 'BENAR', penjelasan: 'Upload adalah proses mengirim/mengunggah file dari komputer ke internet/server.' },
+      { no: 37, kategori: 'Internet', soal: 'Browser contohnya Chrome, Firefox, Edge', jawaban: 'BENAR', penjelasan: 'Semua itu adalah web browser populer untuk mengakses website.' },
+      { no: 38, kategori: 'Internet', soal: 'URL adalah alamat website', jawaban: 'BENAR', penjelasan: 'URL (Uniform Resource Locator) adalah alamat lengkap suatu halaman web.' },
+      { no: 39, kategori: 'Internet', soal: 'HTTP adalah protokol web', jawaban: 'BENAR', penjelasan: 'HTTP (HyperText Transfer Protocol) adalah protokol untuk transfer data di web.' },
+      { no: 40, kategori: 'Internet', soal: 'Bandwidth adalah kecepatan internet', jawaban: 'BENAR', penjelasan: 'Bandwidth menunjukkan kapasitas maksimum transfer data dalam koneksi internet.' },
+
+      // Kategori 5: Keamanan Digital (Soal 41-50)
+      { no: 41, kategori: 'Keamanan Digital', soal: 'Password harus rahasia', jawaban: 'BENAR', penjelasan: 'Password adalah kunci akses yang harus dijaga kerahasiaannya untuk keamanan akun.' },
+      { no: 42, kategori: 'Keamanan Digital', soal: 'Virus dapat merusak komputer', jawaban: 'BENAR', penjelasan: 'Virus komputer adalah program jahat yang dapat merusak file dan sistem.' },
+      { no: 43, kategori: 'Keamanan Digital', soal: 'Firewall melindungi jaringan', jawaban: 'BENAR', penjelasan: 'Firewall adalah sistem keamanan yang mengontrol lalu lintas jaringan masuk dan keluar.' },
+      { no: 44, kategori: 'Keamanan Digital', soal: 'Phishing adalah penipuan online', jawaban: 'BENAR', penjelasan: 'Phishing adalah teknik penipuan untuk mencuri data pribadi dengan menyamar sebagai entitas terpercaya.' },
+      { no: 45, kategori: 'Keamanan Digital', soal: 'Backup adalah cadangan data', jawaban: 'BENAR', penjelasan: 'Backup adalah salinan data yang disimpan untuk berjaga-jaga jika data asli hilang/rusak.' },
+      { no: 46, kategori: 'Keamanan Digital', soal: 'Malware adalah software berbahaya', jawaban: 'BENAR', penjelasan: 'Malware (malicious software) adalah software yang dirancang untuk merusak atau mencuri data.' },
+      { no: 47, kategori: 'Keamanan Digital', soal: 'Antivirus harus selalu update', jawaban: 'BENAR', penjelasan: 'Update antivirus penting untuk mengenali virus-virus baru yang terus bermunculan.' },
+      { no: 48, kategori: 'Keamanan Digital', soal: 'Password 123456 sangat aman', jawaban: 'SALAH', penjelasan: 'Password 123456 sangat lemah dan mudah ditebak. Password kuat harus kompleks dan panjang.' },
+      { no: 49, kategori: 'Keamanan Digital', soal: 'Spam adalah email sampah', jawaban: 'BENAR', penjelasan: 'Spam adalah email massal yang tidak diinginkan, biasanya iklan atau penipuan.' },
+      { no: 50, kategori: 'Keamanan Digital', soal: 'Hacker selalu jahat', jawaban: 'SALAH', penjelasan: 'Ada white hat hacker (ethical hacker) yang membantu keamanan, dan black hat yang jahat.' },
+
+      // Kategori 6: Sistem Bilangan (Soal 51-60)
+      { no: 51, kategori: 'Sistem Bilangan', soal: 'Komputer menggunakan sistem bilangan biner', jawaban: 'BENAR', penjelasan: 'Komputer bekerja dengan sistem biner (0 dan 1) karena transistor hanya punya 2 state.' },
+      { no: 52, kategori: 'Sistem Bilangan', soal: 'Biner terdiri dari angka 0 dan 1', jawaban: 'BENAR', penjelasan: 'Sistem biner (basis 2) hanya menggunakan dua digit: 0 dan 1.' },
+      { no: 53, kategori: 'Sistem Bilangan', soal: 'Desimal adalah sistem bilangan berbasis 10', jawaban: 'BENAR', penjelasan: 'Sistem desimal yang kita gunakan sehari-hari menggunakan 10 digit (0-9).' },
+      { no: 54, kategori: 'Sistem Bilangan', soal: 'Heksadesimal berbasis 16', jawaban: 'BENAR', penjelasan: 'Sistem heksadesimal (basis 16) menggunakan digit 0-9 dan huruf A-F.' },
+      { no: 55, kategori: 'Sistem Bilangan', soal: '1 Byte = 8 Bit', jawaban: 'BENAR', penjelasan: '1 Byte terdiri dari 8 bit. Bit adalah unit terkecil data dalam komputer.' },
+      { no: 56, kategori: 'Sistem Bilangan', soal: '1 KB = 1000 Byte', jawaban: 'SALAH', penjelasan: '1 Kilobyte (KB) = 1024 Byte. Dalam komputer menggunakan basis 2 (2^10 = 1024).' },
+      { no: 57, kategori: 'Sistem Bilangan', soal: '1 MB = 1024 KB', jawaban: 'BENAR', penjelasan: '1 Megabyte (MB) = 1024 Kilobyte. Urutan: Byte < KB < MB < GB < TB.' },
+      { no: 58, kategori: 'Sistem Bilangan', soal: '1 GB = 1024 MB', jawaban: 'BENAR', penjelasan: '1 Gigabyte (GB) = 1024 Megabyte. Smartphone modern biasanya punya RAM 4-8 GB.' },
+      { no: 59, kategori: 'Sistem Bilangan', soal: 'Binary 10 sama dengan desimal 2', jawaban: 'BENAR', penjelasan: 'Biner 10 = (1×2¹) + (0×2⁰) = 2 dalam desimal.' },
+      { no: 60, kategori: 'Sistem Bilangan', soal: 'Binary 11 sama dengan desimal 4', jawaban: 'SALAH', penjelasan: 'Biner 11 = (1×2¹) + (1×2⁰) = 2 + 1 = 3 dalam desimal. Biner 100 = desimal 4.' },
+
+      // Kategori 7: Jaringan Komputer (Soal 61-70)
+      { no: 61, kategori: 'Jaringan Komputer', soal: 'LAN adalah Local Area Network', jawaban: 'BENAR', penjelasan: 'LAN adalah jaringan lokal yang mencakup area terbatas seperti rumah, kantor, atau sekolah.' },
+      { no: 62, kategori: 'Jaringan Komputer', soal: 'WAN adalah Wide Area Network', jawaban: 'BENAR', penjelasan: 'WAN adalah jaringan luas yang mencakup area geografis besar, bahkan antar negara.' },
+      { no: 63, kategori: 'Jaringan Komputer', soal: 'WiFi menggunakan kabel', jawaban: 'SALAH', penjelasan: 'WiFi adalah teknologi wireless (nirkabel) menggunakan gelombang radio, bukan kabel.' },
+      { no: 64, kategori: 'Jaringan Komputer', soal: 'Router menghubungkan jaringan', jawaban: 'BENAR', penjelasan: 'Router menghubungkan beberapa jaringan dan mengatur lalu lintas data antar jaringan.' },
+      { no: 65, kategori: 'Jaringan Komputer', soal: 'IP Address adalah alamat komputer di jaringan', jawaban: 'BENAR', penjelasan: 'IP Address adalah alamat unik yang mengidentifikasi perangkat dalam jaringan.' },
+      { no: 66, kategori: 'Jaringan Komputer', soal: 'Modem menghubungkan ke internet', jawaban: 'BENAR', penjelasan: 'Modem mengubah sinyal digital menjadi analog (dan sebaliknya) untuk koneksi internet.' },
+      { no: 67, kategori: 'Jaringan Komputer', soal: 'Ethernet menggunakan kabel', jawaban: 'BENAR', penjelasan: 'Ethernet adalah teknologi jaringan kabel yang menggunakan kabel UTP/STP.' },
+      { no: 68, kategori: 'Jaringan Komputer', soal: 'Hotspot adalah titik akses WiFi', jawaban: 'BENAR', penjelasan: 'Hotspot adalah lokasi yang menyediakan akses internet wireless melalui WiFi.' },
+      { no: 69, kategori: 'Jaringan Komputer', soal: 'Server menyediakan layanan ke client', jawaban: 'BENAR', penjelasan: 'Dalam arsitektur client-server, server menyediakan layanan/data untuk client.' },
+      { no: 70, kategori: 'Jaringan Komputer', soal: 'Topology adalah bentuk jaringan', jawaban: 'BENAR', penjelasan: 'Topologi jaringan menggambarkan bentuk/struktur koneksi jaringan (star, ring, bus, mesh).' },
+
+      // Kategori 8: Aplikasi Office (Soal 71-80)
+      { no: 71, kategori: 'Aplikasi Office', soal: 'MS Word untuk mengetik dokumen', jawaban: 'BENAR', penjelasan: 'Microsoft Word adalah aplikasi pengolah kata untuk membuat dan mengedit dokumen teks.' },
+      { no: 72, kategori: 'Aplikasi Office', soal: 'MS Excel untuk mengolah angka', jawaban: 'BENAR', penjelasan: 'Microsoft Excel adalah spreadsheet untuk mengolah data, angka, dan membuat perhitungan.' },
+      { no: 73, kategori: 'Aplikasi Office', soal: 'MS PowerPoint untuk presentasi', jawaban: 'BENAR', penjelasan: 'Microsoft PowerPoint digunakan untuk membuat slide presentasi yang menarik.' },
+      { no: 74, kategori: 'Aplikasi Office', soal: 'Copy adalah menyalin', jawaban: 'BENAR', penjelasan: 'Copy (Ctrl+C) menyalin teks/objek tanpa menghilangkan yang asli.' },
+      { no: 75, kategori: 'Aplikasi Office', soal: 'Paste adalah menempel hasil copy', jawaban: 'BENAR', penjelasan: 'Paste (Ctrl+V) menempelkan hasil copy atau cut ke lokasi baru.' },
+      { no: 76, kategori: 'Aplikasi Office', soal: 'Cut adalah memotong', jawaban: 'BENAR', penjelasan: 'Cut (Ctrl+X) memotong teks/objek dari lokasi asli untuk dipindahkan.' },
+      { no: 77, kategori: 'Aplikasi Office', soal: 'Save untuk menyimpan file', jawaban: 'BENAR', penjelasan: 'Save (Ctrl+S) menyimpan pekerjaan agar tidak hilang saat komputer dimatikan.' },
+      { no: 78, kategori: 'Aplikasi Office', soal: 'Print untuk mencetak', jawaban: 'BENAR', penjelasan: 'Print (Ctrl+P) mengirim dokumen ke printer untuk dicetak di kertas.' },
+      { no: 79, kategori: 'Aplikasi Office', soal: 'Undo untuk membatalkan perintah', jawaban: 'BENAR', penjelasan: 'Undo (Ctrl+Z) membatalkan perintah terakhir yang dilakukan.' },
+      { no: 80, kategori: 'Aplikasi Office', soal: 'Redo untuk mengulangi perintah', jawaban: 'BENAR', penjelasan: 'Redo (Ctrl+Y) mengulangi perintah yang telah di-undo.' },
+
+      // Kategori 9: Pemrograman Dasar (Soal 81-90)
+      { no: 81, kategori: 'Pemrograman Dasar', soal: 'Algoritma adalah langkah-langkah penyelesaian masalah', jawaban: 'BENAR', penjelasan: 'Algoritma adalah urutan langkah logis dan sistematis untuk menyelesaikan masalah.' },
+      { no: 82, kategori: 'Pemrograman Dasar', soal: 'Flowchart adalah diagram alur', jawaban: 'BENAR', penjelasan: 'Flowchart menggambarkan alur algoritma dengan simbol-simbol grafis.' },
+      { no: 83, kategori: 'Pemrograman Dasar', soal: 'Coding adalah menulis program', jawaban: 'BENAR', penjelasan: 'Coding adalah proses menulis kode program menggunakan bahasa pemrograman.' },
+      { no: 84, kategori: 'Pemrograman Dasar', soal: 'Python adalah bahasa pemrograman', jawaban: 'BENAR', penjelasan: 'Python adalah bahasa pemrograman populer yang mudah dipelajari pemula.' },
+      { no: 85, kategori: 'Pemrograman Dasar', soal: 'Variable adalah tempat menyimpan data', jawaban: 'BENAR', penjelasan: 'Variable adalah wadah untuk menyimpan nilai/data dalam program.' },
+      { no: 86, kategori: 'Pemrograman Dasar', soal: 'Input adalah data yang dimasukkan', jawaban: 'BENAR', penjelasan: 'Input adalah data yang dimasukkan user ke program untuk diproses.' },
+      { no: 87, kategori: 'Pemrograman Dasar', soal: 'Output adalah hasil keluaran', jawaban: 'BENAR', penjelasan: 'Output adalah hasil pemrosesan program yang ditampilkan kepada user.' },
+      { no: 88, kategori: 'Pemrograman Dasar', soal: 'Loop adalah pengulangan', jawaban: 'BENAR', penjelasan: 'Loop (for, while) digunakan untuk mengulangi blok kode beberapa kali.' },
+      { no: 89, kategori: 'Pemrograman Dasar', soal: 'Debugging adalah mencari kesalahan program', jawaban: 'BENAR', penjelasan: 'Debugging adalah proses mencari dan memperbaiki bug/error dalam program.' },
+      { no: 90, kategori: 'Pemrograman Dasar', soal: 'Syntax adalah aturan penulisan kode', jawaban: 'BENAR', penjelasan: 'Syntax adalah aturan tata bahasa dalam bahasa pemrograman yang harus diikuti.' },
+
+      // Kategori 10: Teknologi & Etika (Soal 91-100)
+      { no: 91, kategori: 'Teknologi & Etika', soal: 'AI singkatan dari Artificial Intelligence', jawaban: 'BENAR', penjelasan: 'AI adalah kecerdasan buatan yang memungkinkan mesin belajar dan membuat keputusan.' },
+      { no: 92, kategori: 'Teknologi & Etika', soal: 'Robot dapat diprogram', jawaban: 'BENAR', penjelasan: 'Robot adalah mesin yang dapat diprogram untuk melakukan tugas secara otomatis.' },
+      { no: 93, kategori: 'Teknologi & Etika', soal: 'Cloud computing adalah penyimpanan online', jawaban: 'BENAR', penjelasan: 'Cloud computing menyimpan dan mengakses data melalui internet, bukan hard disk lokal.' },
+      { no: 94, kategori: 'Teknologi & Etika', soal: 'Smartphone adalah komputer genggam', jawaban: 'BENAR', penjelasan: 'Smartphone memiliki kemampuan komputer lengkap dalam ukuran yang portable.' },
+      { no: 95, kategori: 'Teknologi & Etika', soal: 'Tablet lebih besar dari smartphone', jawaban: 'BENAR', penjelasan: 'Tablet umumnya berukuran 7-12 inci, lebih besar dari smartphone (5-7 inci).' },
+      { no: 96, kategori: 'Teknologi & Etika', soal: 'E-learning adalah pembelajaran online', jawaban: 'BENAR', penjelasan: 'E-learning adalah sistem pembelajaran jarak jauh menggunakan teknologi internet.' },
+      { no: 97, kategori: 'Teknologi & Etika', soal: 'Cyberbullying adalah perundungan online', jawaban: 'BENAR', penjelasan: 'Cyberbullying adalah perundungan yang terjadi di dunia digital/media sosial.' },
+      { no: 98, kategori: 'Teknologi & Etika', soal: 'Digital footprint adalah jejak digital', jawaban: 'BENAR', penjelasan: 'Digital footprint adalah jejak aktivitas online kita yang tersimpan di internet.' },
+      { no: 99, kategori: 'Teknologi & Etika', soal: 'Hak cipta digital harus dihormati', jawaban: 'BENAR', penjelasan: 'Konten digital (foto, video, musik, software) memiliki hak cipta yang harus dihormati.' },
+      { no: 100, kategori: 'Teknologi & Etika', soal: 'Copy-paste karya orang lain tanpa izin adalah plagiarisme', jawaban: 'BENAR', penjelasan: 'Plagiarisme adalah mencuri karya orang lain dan mengakui sebagai milik sendiri.' }
+    ];
+
+    const kategoris = [
+      { id: 1, nama: 'Dasar Komputer', range: 'Soal 1-10', icon: '🖥️' },
+      { id: 2, nama: 'Hardware', range: 'Soal 11-20', icon: '🔧' },
+      { id: 3, nama: 'Software', range: 'Soal 21-30', icon: '💿' },
+      { id: 4, nama: 'Internet', range: 'Soal 31-40', icon: '🌐' },
+      { id: 5, nama: 'Keamanan Digital', range: 'Soal 41-50', icon: '🔒' },
+      { id: 6, nama: 'Sistem Bilangan', range: 'Soal 51-60', icon: '🔢' },
+      { id: 7, nama: 'Jaringan Komputer', range: 'Soal 61-70', icon: '📡' },
+      { id: 8, nama: 'Aplikasi Office', range: 'Soal 71-80', icon: '📊' },
+      { id: 9, nama: 'Pemrograman Dasar', range: 'Soal 81-90', icon: '💻' },
+      { id: 10, nama: 'Teknologi & Etika', range: 'Soal 91-100', icon: '🤖' }
+    ];
+
+    let currentKategori = null;
+
+    // LocalStorage functions
+    function getAnswers() {
+      const stored = localStorage.getItem('quizInformatikaAnswers');
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveAnswer(soalNo, userAnswer, isCorrect) {
+      const answers = getAnswers();
+      const existingIndex = answers.findIndex(a => a.soal_number === soalNo);
+      
+      const newAnswer = {
+        soal_number: soalNo,
+        user_answer: userAnswer,
+        is_correct: isCorrect,
+        timestamp: new Date().toISOString()
+      };
+
+      if (existingIndex >= 0) {
+        answers[existingIndex] = newAnswer;
+      } else {
+        answers.push(newAnswer);
+      }
+
+      localStorage.setItem('quizInformatikaAnswers', JSON.stringify(answers));
+      updateStats();
+      return true;
+    }
+
+    function deleteAnswersByKategori(kategoriNama) {
+      const answers = getAnswers();
+      const soalKategori = soalData.filter(s => s.kategori === kategoriNama);
+      const soalNumbers = soalKategori.map(s => s.no);
+      
+      const filtered = answers.filter(a => !soalNumbers.includes(a.soal_number));
+      localStorage.setItem('quizInformatikaAnswers', JSON.stringify(filtered));
+      updateStats();
+    }
+
+    function deleteAllAnswers() {
+      localStorage.removeItem('quizInformatikaAnswers');
+      updateStats();
+    }
+
+    function updateStats() {
+      const answers = getAnswers();
+      const totalDijawab = answers.length;
+      const totalBenar = answers.filter(a => a.is_correct).length;
+      const nilai = totalDijawab > 0 ? Math.round((totalBenar / 100) * 100) : 0;
+
+      document.getElementById('dijawab').textContent = totalDijawab;
+      document.getElementById('benar').textContent = totalBenar;
+      document.getElementById('nilai').textContent = nilai;
+
+      renderKategoris();
+      
+      if (currentKategori) {
+        renderSoalInModal(currentKategori);
+      }
+    }
+
+    function renderKategoris() {
+      const grid = document.getElementById('kategori-grid');
+      const answers = getAnswers();
+      
+      grid.innerHTML = kategoris.map(kat => {
+        const soalKategori = soalData.filter(s => s.kategori === kat.nama);
+        const answeredInKat = answers.filter(a => {
+          const soal = soalData.find(s => s.no === a.soal_number);
+          return soal && soal.kategori === kat.nama;
+        });
+        const progress = (answeredInKat.length / 10) * 100;
+
+        return `
+          <div class="kategori-card" data-kategori="${kat.nama}">
+            <h3>${kat.icon} ${kat.nama}</h3>
+            <div class="soal-range">${kat.range}</div>
+            <div class="progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progress}%"></div>
+              </div>
+              <span class="progress-text">${answeredInKat.length}/10</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('.kategori-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const kategoriNama = card.dataset.kategori;
+          showQuizModal(kategoriNama);
+        });
+      });
+    }
+
+    function showQuizModal(kategoriNama) {
+      currentKategori = kategoriNama;
+      const modal = document.getElementById('quiz-modal');
+      const modalTitle = document.getElementById('modal-title');
+
+      modalTitle.textContent = kategoriNama;
+      renderSoalInModal(kategoriNama);
+
+      modal.classList.add('active');
+    }
+
+    function renderSoalInModal(kategoriNama) {
+      const container = document.getElementById('soal-container');
+      const soalKategori = soalData.filter(s => s.kategori === kategoriNama);
+      const answers = getAnswers();
+
+      container.innerHTML = soalKategori.map(soal => {
+        const existingAnswer = answers.find(a => a.soal_number === soal.no);
+        const isAnswered = !!existingAnswer;
+        const isCorrect = existingAnswer?.is_correct;
+
+        let soalClass = 'soal-item';
+        if (isAnswered) {
+          soalClass += isCorrect ? ' answered-correct' : ' answered-wrong';
+        }
+
+        return `
+          <div class="${soalClass}">
+            <span class="soal-number">Soal ${soal.no}</span>
+            <div class="soal-text">${soal.soal}</div>
+            <div class="answer-buttons">
+              <button class="btn-answer ${existingAnswer?.user_answer === 'BENAR' ? 'selected-benar' : ''}" 
+                      data-soal="${soal.no}" 
+                      data-answer="BENAR"
+                      ${isAnswered ? 'disabled' : ''}>
+                ✓ BENAR
+              </button>
+              <button class="btn-answer ${existingAnswer?.user_answer === 'SALAH' ? 'selected-salah' : ''}" 
+                      data-soal="${soal.no}" 
+                      data-answer="SALAH"
+                      ${isAnswered ? 'disabled' : ''}>
+                ✗ SALAH
+              </button>
+            </div>
+            ${isAnswered ? `
+              <div class="result-badge ${isCorrect ? 'correct' : 'wrong'}">
+                ${isCorrect ? '✓ Jawaban Anda Benar!' : '✗ Jawaban Anda Salah'}
+              </div>
+              <div class="pembahasan">
+                <div class="pembahasan-title">📖 Pembahasan:</div>
+                <div class="pembahasan-text"><strong>Jawaban yang benar: ${soal.jawaban}</strong><br>${soal.penjelasan}</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.btn-answer').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const soalNo = parseInt(btn.dataset.soal);
+          const userAnswer = btn.dataset.answer;
+          handleAnswer(soalNo, userAnswer);
+        });
+      });
+
+      const answeredCount = answers.filter(a => {
+        const soal = soalData.find(s => s.no === a.soal_number);
+        return soal && soal.kategori === kategoriNama;
+      }).length;
+
+      const resetBtn = document.getElementById('reset-kategori');
+      if (answeredCount > 0) {
+        resetBtn.style.display = 'inline-block';
+        resetBtn.onclick = () => handleResetKategori(kategoriNama);
+      } else {
+        resetBtn.style.display = 'none';
+      }
+    }
+
+    function handleAnswer(soalNo, userAnswer) {
+      const soal = soalData.find(s => s.no === soalNo);
+      if (!soal) return;
+
+      const isCorrect = userAnswer === soal.jawaban;
+      saveAnswer(soalNo, userAnswer, isCorrect);
+      
+      showMessage(isCorrect ? '✓ Jawaban Benar!' : '✗ Jawaban Salah. Lihat pembahasan di bawah.');
+    }
+
+    function handleResetKategori(kategoriNama) {
+      const resetBtn = document.getElementById('reset-kategori');
+      const originalText = resetBtn.textContent;
+      
+      resetBtn.textContent = 'Yakin Reset?';
+      resetBtn.onclick = () => {
+        deleteAnswersByKategori(kategoriNama);
+        showMessage('Kategori berhasil direset!');
+        resetBtn.textContent = originalText;
+        resetBtn.onclick = () => handleResetKategori(kategoriNama);
+      };
+
+      setTimeout(() => {
+        if (resetBtn.textContent === 'Yakin Reset?') {
+          resetBtn.textContent = originalText;
+          resetBtn.onclick = () => handleResetKategori(kategoriNama);
+        }
+      }, 3000);
+    }
+
+    function handleResetAll() {
+      const resetBtn = document.getElementById('reset-all');
+      const originalText = resetBtn.textContent;
+      
+      resetBtn.textContent = '⚠️ Yakin Reset Semua?';
+      resetBtn.onclick = () => {
+        deleteAllAnswers();
+        showMessage('Semua jawaban berhasil direset!');
+        resetBtn.textContent = originalText;
+        resetBtn.onclick = handleResetAll;
+      };
+
+      setTimeout(() => {
+        if (resetBtn.textContent === '⚠️ Yakin Reset Semua?') {
+          resetBtn.textContent = originalText;
+          resetBtn.onclick = handleResetAll;
+        }
+      }, 3000);
+    }
+
+    function setupEventListeners() {
+      const closeBtn = document.getElementById('close-modal');
+      const modal = document.getElementById('quiz-modal');
+      const resetAllBtn = document.getElementById('reset-all');
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        currentKategori = null;
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          currentKategori = null;
+        }
+      });
+
+      resetAllBtn.addEventListener('click', handleResetAll);
+    }
+
+    function showMessage(message) {
+      const existingToast = document.querySelector('.toast-message');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'toast-message';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function init() {
+      renderKategoris();
+      setupEventListeners();
+      updateStats();
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a559620e7bace0d',t:'MTc2NDI4ODA0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
